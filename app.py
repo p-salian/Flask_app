@@ -19,10 +19,21 @@ with open('model_2.pkl', 'rb') as file:
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
 
+
+label_map = {
+    0: "None",
+    1: "Building",
+    2: "Forest",
+    3: "Glacier",
+    4: "Sea",
+    5: "Mountain",
+    6: "Street"
+}
+
 def preprocess_image(image_path):
-    
+    # Preprocess the image (example: resize and flatten)
     image = Image.open(image_path).convert('L')
-    image = image.resize((64, 64))
+    image = image.resize((128, 128))
     image_array = np.array(image).flatten()
     return image_array
 
@@ -46,7 +57,11 @@ def index():
             prediction_1 = model.predict(image_array)
             prediction_2 = model_2.predict(image_array)
 
-            return render_template('index.html', prediction_1=prediction_1[0], prediction_2=prediction_2[0])
+            
+            prediction_1_name = label_map[prediction_1[0]]
+            prediction_2_name = label_map[prediction_2[0]]
+
+            return render_template('index.html', prediction_1=prediction_1_name, prediction_2=prediction_2_name)
 
     return render_template('index.html')
 
