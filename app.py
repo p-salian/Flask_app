@@ -31,7 +31,7 @@ label_map = {
 }
 
 def preprocess_image(image_path):
-    # Preprocess the image (example: resize and flatten)
+    
     image = Image.open(image_path).convert('L')
     image = image.resize((128, 128))
     image_array = np.array(image).flatten()
